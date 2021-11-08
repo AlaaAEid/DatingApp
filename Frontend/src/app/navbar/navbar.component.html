@@ -3,7 +3,7 @@
     <a class="navbar-brand" href="#">Carousel</a>
 
     
-      <ul class="navbar-nav me-auto mb-2 mb-md-0" *ngIf="loggedIn">
+      <ul class="navbar-nav me-auto mb-2 mb-md-0" *ngIf="accountService.currentUser$ | async">
         <li class="nav-item">
           <a class="nav-link"  href="#">Matches</a>
         </li>
@@ -13,20 +13,18 @@
         <li class="nav-item">
           <a class="nav-link ">Messages</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link " (click)="logout()">Logout</a>
-        </li>
       </ul>
-      <div class="dropdown">
-        <a href="" class="dropdown-toggle text-light">
+      <div class="dropdown" *ngIf="accountService.currentUser$ | async" dropdown>
+        <a  class="dropdown-toggle text-light" dropdownToggle>
           Welcome User
         </a>
-        <div class="dropdown-menu" *ngIf="loggedIn">
-          <a href="" class="dropdown-item">Edit Profile</a>
-          <a href="" class="dropdown-item" (click)="logout()">Logout</a>
+        <div class="dropdown-menu mt-3" *dropdownMenu>
+          <a  class="dropdown-item">Edit Profile</a>
+          <div class="dropdown-divider"></div>
+          <a  class="dropdown-item" (click)="logout()">Logout</a>
         </div>
       </div>
-      <form #loginForm="ngForm" *ngIf="!loggedIn" class="d-flex" (ngSubmit)="login()" autocomplete="off" >
+      <form #loginForm="ngForm" *ngIf="( accountService.currentUser$ | async) === null" class="d-flex" (ngSubmit)="login()" autocomplete="off" >
         <input name="username" [(ngModel)]="model.username" class="form-control me-2" type="text" placeholder="Username" aria-label="Username">
         <input name="password" [(ngModel)]="model.password" class="form-control me-2" type="password" placeholder="Password" aria-label="Password">
         <button class="btn btn-outline-success" type="submit">Login</button>
